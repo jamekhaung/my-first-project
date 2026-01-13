@@ -32,6 +32,7 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () =>
-  console.log("聊天服务器已启动: http://localhost:3000")
-);
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`服务器已启动，端口：${PORT}`);
+});
