@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>迷你聊天室</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  </head>
+  <body>
+    <h2>Socket.io 实时聊天</h2>
+    <div
+      id="messages"
+      style="
+        height: 200px;
+        border: 1px solid #ccc;
+        overflow-y: scroll;
+        margin-bottom: 10px;
+        padding: 10px;
+      "
+    ></div>
+
+    <input type="text" id="input" placeholder="说点什么..." />
+    <button onclick="sendMessage()">发送</button>
+
+    <script>
+      const socket = io(); // 不填地址，默认连接到当前网页部署的服务器地址
+      const messagesDiv = document.getElementById("messages");
+      // 随机生成一个用户ID，模拟不同的用户
+      const userName = "用户" + Math.floor(Math.random() * 1000);
+
+      socket.on("broadcast_message", (data) => {
+        const item = document.createElement("div");
+        item.style.marginBottom = "10px";
+        // 加上头像和名字
+        item.innerHTML = `
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${data.user}" style="width:30px; vertical-align:middle;">
+        <strong>${data.user}:</strong> ${data.text}
+    `;
+        messagesDiv.appendChild(item);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      });
+
+      function sendMessage() {
+        const input = document.getElementById("input");
+        if (input.value) {
+          // 发送一个对象，包含名字和文字
+          socket.emit("chat_message", {
+            user: userName,
+            text: input.value,
+          });
+          input.value = "";
+        }
+      }
+    </script>
+  </body>
+</html>
