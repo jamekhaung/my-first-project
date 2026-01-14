@@ -21,7 +21,9 @@
     <button onclick="sendMessage()">发送</button>
 
     <script>
-      const socket = io(); // 不填地址，默认连接到当前网页部署的服务器地址
+      const socket = io({
+        transports: ["polling"], // 与后端保持一致
+      });
       const messagesDiv = document.getElementById("messages");
       // 随机生成一个用户ID，模拟不同的用户
       const userName = "用户" + Math.floor(Math.random() * 1000);

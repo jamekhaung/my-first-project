@@ -9,8 +9,8 @@ app.use(cors());
 // 创建一个 HTTP 服务器来包裹 Express
 const server = http.createServer(app);
 // 初始化 Socket.io 并允许跨域
-const io = new Server(server, {
-  cors: { origin: "*" },
+const io = require("socket.io")(server, {
+  transports: ["polling"], // 强制使用轮询模式，兼容 Vercel
 });
 
 const PORT = process.env.PORT || 3000;
